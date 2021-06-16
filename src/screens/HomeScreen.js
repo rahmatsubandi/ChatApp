@@ -12,18 +12,11 @@ export default function HomeScreen({navigation}) {
   const [loading, setLoading] = useState(true);
   const [leaveThreads, setLeaveThreads] = useState(null);
 
-  /**
-   * TODO DELETE
-   * Jadi ini udah saya buat functionnya bang,
-   * cuma saya bingung cara esekusi fungsi threadsDelete ini
-   */
-  function handleLeaveThreads() {
-    threadsDelete.leaveThreads({channel: leaveThreads}).then(() => {
+  function handleLeaveThreads(id) {
+    const dbRef = firestore().collection('THREADS').doc(id);
+    dbRef.delete().then(res => {
+      console.log('Item removed from database with id ' + id);
       setLeaveThreads(null);
-
-      threadsDelete.getThreadss({filter: {joined: true}}).then(result => {
-        setThreadss(result.paginator.items);
-      });
     });
   }
 
@@ -94,10 +87,12 @@ export default function HomeScreen({navigation}) {
       />
       <Portal>
         <Dialog visible={leaveThreads} onDismiss={handleDismissLeaveThreads}>
-          <Dialog.Title>Leave channel?</Dialog.Title>
+          <Dialog.Title>Delete Chat Room?</Dialog.Title>
           <Dialog.Actions>
             <Button onPress={handleDismissLeaveThreads}>Cancel</Button>
-            <Button onPress={handleLeaveThreads}>Confirm</Button>
+            <Button onPress={() => handleLeaveThreads(leaveThreads._id)}>
+              Confirm
+            </Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
