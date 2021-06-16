@@ -145,6 +145,7 @@ export default function RoomScreen({route}) {
       placeholder="Type your message here..."
       alwaysShowSend
       showUserAvatar
+      textInputStyle={{color: '#333'}}
       scrollToBottom
       renderBubble={renderBubble}
       renderLoading={renderLoading}
